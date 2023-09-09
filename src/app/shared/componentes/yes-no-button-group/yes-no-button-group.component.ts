@@ -1,4 +1,11 @@
-import { Component, EventEmitter, Input, OnInit, Output, forwardRef } from '@angular/core';
+import {
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+  forwardRef,
+} from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 import { UniqueIdService } from './services/unique-id/unique-id.service';
 
@@ -15,6 +22,7 @@ import { UniqueIdService } from './services/unique-id/unique-id.service';
   ],
 })
 export class YesNoButtonGroupComponent implements OnInit, ControlValueAccessor {
+  @Input() disabled: boolean = false;
   @Input() value: string = null;
   @Input() label: string = null;
   @Output() valueChange = new EventEmitter<string>();
@@ -24,7 +32,9 @@ export class YesNoButtonGroupComponent implements OnInit, ControlValueAccessor {
   onTouched = () => {};
 
   constructor(private uniqueIdService: UniqueIdService) {
-    this.id = this.uniqueIdService.generateUniqueIdWithPrefix('yes-no-button-group');
+    this.id = this.uniqueIdService.generateUniqueIdWithPrefix(
+      'yes-no-button-group'
+    );
   }
 
   ngOnInit(): void {}
@@ -33,14 +43,17 @@ export class YesNoButtonGroupComponent implements OnInit, ControlValueAccessor {
     this.value = value;
     this.onChange(this.value);
   }
+
   registerOnChange(fn: any): void {
     this.onChange = fn;
   }
+
   registerOnTouched(fn: () => void): void {
     this.onTouched = fn;
   }
+  
   setDisabledState?(isDisabled: boolean): void {
-    throw new Error('Method not implemented.');
+    this.disabled = isDisabled;
   }
 
   public activate(value: string) {
@@ -52,5 +65,5 @@ export class YesNoButtonGroupComponent implements OnInit, ControlValueAccessor {
 
 enum YesNoButtonGroupOptions {
   YES = 'yes',
-  NO = 'no'
+  NO = 'no',
 }
